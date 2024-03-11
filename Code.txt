@@ -1,0 +1,108 @@
+; -----------------------------------------------------------------------------------------
+; -----------------------------------------------------------------------------------------
+; Text Section.
+
+section	.text
+
+global _start       ;must be declared for using gcc
+
+; -----------------------------------------------------------------------------------------
+; Main
+	
+_start:                     ; Think main
+    
+    mov     eax, msg        ; put message into eax
+    call    sprtln          ; invoke strprtln, print message with new line
+    
+    mov     edx, 255        ; number of bytes to read
+    mov     ecx, sinput     ; reserved space to store input
+    mov     ebx, 0          ; file: stdin
+    mov     eax, 3          ; system call number (sys_read)
+    int     0x80            ; call kernel
+    
+    mov     eax, msg1_1
+    call    sprtln
+    mov     eax, sinput     ; move butter into eax, input contains linefeed
+    call    sprt            ; call print function
+    mov     eax, msg1_2
+    call    sprtln
+    
+    call    quit            ; exit program
+
+; -----------------------------------------------------------------------------------------
+; Utility functions.
+
+; void exit             exit program
+quit:
+    mov     ebx, 0          ; return 0 status on exit - 'no errors'
+    mov     eax, 1          ; system call number (sys_exit)
+    int     0x80            ; call kernel
+    ret
+
+; int strlen            calculates the length of a string
+; arg (ebx) msg         the string we want to calculate the length of
+; ret (eax) strlen      returns length of string into eax address
+slen:
+    push    ebx             ; Push the value of ebx onto the stack to preserve it
+    mov     ebx, eax        ; move the address of eax into ebx
+
+nextchar:
+    cmp     byte [eax], 0   ; compare byte pointed to by eax with zero (end of string delimeter)
+    jz      finished        ; if the comparison is not true, continue
+    inc     eax             ; length increment
+    jmp     nextchar        ; loop back to this label
+    
+finished:
+    sub     eax, ebx        ; eax is at the end of the string now, subtract ebx (at start) to get                        ; segment count
+    pop     ebx             ; pop the value from the stack back onto ebx
+    ret                     ; return to where the function was called
+
+; void sprt             prints a string to the terminal
+; arg (eax) msg         the data string we want to print
+sprt:
+    push    edx             ; preserve data in ebx
+    push    ecx             ; preserve data in ecx
+    push    ebx             ; preserve data in eax
+    push    eax             ; push argument onto stack
+    call    slen            ; invoke string length function call
+    mov     edx, eax        ; put the length argument in
+    pop     eax             ; get the argument back
+    mov     ecx, eax        ; move data message
+    mov     ebx, 1          ; File: stdout
+    mov     eax, 4          ; system call number (sys_write)
+    int     0x80            ; call kernel
+    pop     ebx             ; retrieve ebx from the stack
+    pop     ecx             ; retrieve ecx from the stack
+    pop     edx             ; retrieve edx from the stack
+    ret                     ; return to last point of execution
+
+; void sprtln           prints a string to the terminal with new line
+; arg (eax) msg         the message string we want to print
+sprtln:
+    call    sprt            ; print message in arguments
+    push    eax             ; Preserve eax on the stack
+    mov     eax, 0Ah        ; move new line character (linefeed)
+    push    eax             ; push linefeed onto stack so we can get the address
+    mov     eax, esp        ; move the address of the current stack pointer into eax for printing
+    call    sprt            ; print new line
+    pop     eax             ; remove linefeed from stack
+    pop     eax             ; restore original value of eax
+    ret                     ; return to last point of execution
+
+; -----------------------------------------------------------------------------------------
+; -----------------------------------------------------------------------------------------
+; Data section.
+
+section	.data
+
+msg	        db	'Print fizzbuzz for how many numbers: ', 0h
+msg1_1      db  'Printing fizzbuzz for ', 0h
+msg1_2      db  'numbers', 0h
+
+; -----------------------------------------------------------------------------------------
+; -----------------------------------------------------------------------------------------
+; BSS section.
+
+section .bss
+
+sinput:     resb    255                         ; reserve 255 bytes in memory
