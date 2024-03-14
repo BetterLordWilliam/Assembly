@@ -8,7 +8,7 @@ global _start       ;must be declared for using gcc
 
 ; -----------------------------------------------------------------------------------------
 ; Main
-	
+; BRYAN
 _start:                     ; Think main
     
     mov     eax, msg        ; put message into eax
@@ -90,6 +90,7 @@ quit:
 ; int strlen            calculates the length of a string
 ; arg (ebx) msg         the string we want to calculate the length of
 ; ret (eax) strlen      returns length of string into eax address
+; NAV
 slen:
     push    ebx             ; Push the value of ebx onto the stack to preserve it
     mov     ebx, eax        ; move the address of eax into ebx
@@ -107,6 +108,7 @@ slen:
 
 ; void sprt             prints a string to the terminal
 ; arg (eax) msg         the data string we want to print
+; NAV
 sprt:
     push    edx             ; preserve data in ebx
     push    ecx             ; preserve data in ecx
@@ -126,6 +128,7 @@ sprt:
 
 ; void sprtln           prints a string to the terminal with new line
 ; arg (eax) msg         the message string we want to print
+; NAV
 sprtln:
     call    sprt            ; print message in arguments
     push    eax             ; Preserve eax on the stack
@@ -139,6 +142,7 @@ sprtln:
 
 ; void iprt             prints an integer to the terminal
 ; arg (eax) integer     the integer we want to print
+; WILL
 iprt:
     push    eax             ; preserve data in eax
     push    ecx             ; preserve data in ecx
@@ -172,6 +176,7 @@ printloop:
 
 ; void iprtln           prints an integer to the terminal with newline
 ; arg (eax) integer     the integer we want to print
+; WILL
 iprtln:
     call    iprt            ; call integer print function
     push    eax             ; preserve data in eax
@@ -185,6 +190,7 @@ iprtln:
 
 ; int atoi              turns a string into an integer
 ; arg (eax) string     the string we want as an integer
+; WILL
 atoi:
     push    ebx             ; preserve data in ebx
     push    ecx             ; preserve data in ecx
@@ -225,10 +231,11 @@ atoi:
 ; -----------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------
 ; Data section.
+; NAV
 
 section	.data
 
-msg	        db	'Print fizzbuzz for how many numbers: ', 0h
+msg	    db	'Print fizzbuzz for how many numbers: ', 0h
 msg1_1      db  'Printing fizzbuzz for ', 0h
 msg1_2      db  ' numbers', 0h
 fizz        db 'fizz', 0h
@@ -238,6 +245,7 @@ fizzbuzz    db 'fizzbuzz', 0h
 ; -----------------------------------------------------------------------------------------
 ; -----------------------------------------------------------------------------------------
 ; BSS section.
+; NAV
 
 section .bss
 
