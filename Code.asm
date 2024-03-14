@@ -20,14 +20,14 @@ _start:                     ; Think main
     mov     eax, 3          ; system call number (sys_read)
     int     0x80            ; call kernel
     
-    mov     eax, msg1_1
-    call    sprt
-    mov     eax, sinput     ; move butter into eax, input contains linefeed
-    call    atoi
-    push    eax             ; preserve value of eax on the stack25
-    call    iprt
-    mov     eax, msg1_2
-    call    sprtln
+    mov     eax, msg1_1     ; move msg1_1 into sprt argument (eax)
+    call    sprt            ; call sprt
+    mov     eax, sinput     ; move input into atoi argument (eax)
+    call    atoi            ; call atoi (turn argument into integer)
+    push    eax             ; preserve value of eax on the stack (save the limit)
+    call    iprt            ; print the argument
+    mov     eax, msg1_2     ; move msg1_2 into sprtln argument (eax)
+    call    sprtln          ; call sprt
     
     mov     ecx, 0          ; counter
 
