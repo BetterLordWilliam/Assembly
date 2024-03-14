@@ -150,7 +150,7 @@ iprt:
     push    esi             ; preserve data in esi
     mov     ecx, 0          ; counter of how many bytes we need
 
-divideloop:
+.divideloop:
     inc     ecx             ; Increment byte counter
     mov     edx, 0          ; empty edx
     mov     esi, 10         ; mov 10 into esi
@@ -158,15 +158,15 @@ divideloop:
     add     edx, 48         ; convert the remainder stored in edx to ascii representation
     push    edx             ; push string representation of integer to stack
     cmp     eax, 0          ; check if there are digits
-    jnz     divideloop      ; continue to convert digits
+    jnz     .divideloop      ; continue to convert digits
 
-printloop:
+.printloop:
     dec     ecx             ; count each byte to print
     mov     eax, esp        ; mov the stack pointer (esp) into eax for printing
     call    sprt            ; print the integer string representation in eax
     pop     eax             ; remove last character from the stack
     cmp     ecx, 0          ; check if there are digits
-    jnz     printloop       ; print other digits
+    jnz     .printloop       ; print other digits
     
     pop     esi             ; retrieve esi from the stack
     pop     edx             ; retrieve edx from the stack
